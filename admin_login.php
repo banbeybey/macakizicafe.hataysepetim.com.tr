@@ -2,8 +2,8 @@
 session_start();
 require_once "db.php";
 
-if (isset($_SESSION["user_id"])) {
-    header("Location: " . ($_SESSION["rol"] == "admin" ? "admin.php" : "garson.php"));
+if (isset($_SESSION["user_id"]) && $_SESSION["rol"] === "admin") {
+    header("Location: admin.php");
     exit;
 }
 
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kullanici_adi = $_POST["kullanici_adi"] ?? "";
     $sifre         = $_POST["sifre"] ?? "";
 
-    $stmt = $conn->prepare("SELECT * FROM kullanicilar WHERE kullanici_adi = ? AND sifre = ? AND aktif = 1 AND rol = 'garson' LIMIT 1");
+    $stmt = $conn->prepare("SELECT * FROM kullanicilar WHERE kullanici_adi = ? AND sifre = ? AND aktif = 1 AND rol = 'admin' LIMIT 1");
     $stmt->bind_param("ss", $kullanici_adi, $sifre);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["user_id"] = $user["id"];
         $_SESSION["ad"]      = $user["ad"];
         $_SESSION["rol"]     = $user["rol"];
-        header("Location: garson.php");
+        header("Location: admin.php");
         exit;
     } else {
         $hata = "Kullanıcı adı veya şifre hatalı.";
@@ -32,24 +32,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Maça Kızı — Garson Girişi</title>
+<title>Maça Kızı — Yönetici Girişi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Arama motorlarından gizle -->
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
 body {
     display:flex; align-items:center; justify-content:center; min-height:100vh;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16,200,238,0.14) 0%, transparent 70%), var(--bg);
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,16,46,0.14) 0%, transparent 70%), var(--bg);
 }
 .login-wrap { width:92%; max-width:420px; position:relative; z-index:1; }
 .login-logo { text-align:center; margin-bottom:32px; }
 .logo-icon {
     width:72px; height:72px;
-    background: linear-gradient(135deg, #0a6b7f, #10c8ee);
+    background: linear-gradient(135deg, #7f0a1a, #c8102e);
     border-radius:20px; display:flex; align-items:center; justify-content:center;
     font-size:34px; margin:0 auto 16px; color:#fff;
-    box-shadow:0 8px 32px rgba(16,200,238,0.35), 0 0 0 1px rgba(255,255,255,0.06);
+    box-shadow:0 8px 32px rgba(200,16,46,0.4), 0 0 0 1px rgba(255,255,255,0.06);
     animation: fadeIn 0.6s ease;
 }
 .logo-title { font-family:'Playfair Display',serif; font-size:30px; font-weight:700; }
@@ -60,9 +62,16 @@ body {
     animation: slideUp 0.5s ease;
 }
 .login-card-title { font-size:14px; color:var(--muted); margin-bottom:24px; text-align:center; text-transform:uppercase; letter-spacing:1px; }
+.admin-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(200,16,46,0.12); color:#c8102e;
+    border:1px solid rgba(200,16,46,0.25);
+    border-radius:10px; padding:6px 12px; font-size:11px; font-weight:800;
+    letter-spacing:.8px; text-transform:uppercase; margin-bottom:20px;
+}
 .footer-note { text-align:center; color:var(--muted); font-size:12px; margin-top:24px; opacity:0.5; }
 body::after {
-    content:'🍽'; position:fixed; font-size:300px; opacity:0.03;
+    content:'♠'; position:fixed; font-size:400px; color:#c8102e; opacity:0.025;
     top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; z-index:0; line-height:1;
 }
 @keyframes fadeIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
@@ -72,13 +81,16 @@ body::after {
 <body>
 <div class="login-wrap">
     <div class="login-logo">
-        <div class="logo-icon">🍽</div>
+        <div class="logo-icon">♠</div>
         <div class="logo-title">Maça Kızı</div>
-        <div class="logo-sub">Garson Girişi</div>
+        <div class="logo-sub">Yönetici Girişi</div>
     </div>
 
     <div class="login-card">
-        <div class="login-card-title">Garson Paneline Giriş</div>
+        <div style="text-align:center">
+            <span class="admin-badge">🔐 Yönetici Paneli</span>
+        </div>
+        <div class="login-card-title">Yetkili Personel Girişi</div>
 
         <?php if (!empty($hata)): ?>
             <div class="alert-error">⚠ <?php echo htmlspecialchars($hata); ?></div>
@@ -86,14 +98,14 @@ body::after {
 
         <form method="POST">
             <div class="form-group">
-                <label class="form-label">Kullanıcı Adı</label>
-                <input class="form-control" type="text" name="kullanici_adi" placeholder="kullanıcı adınızı girin" required autofocus>
+                <label class="form-label">Yönetici Adı</label>
+                <input class="form-control" type="text" name="kullanici_adi" placeholder="yönetici adınızı girin" required autofocus>
             </div>
             <div class="form-group">
                 <label class="form-label">Şifre</label>
                 <input class="form-control" type="password" name="sifre" placeholder="••••••••" required>
             </div>
-            <button class="btn btn-primary" type="submit">Giriş Yap →</button>
+            <button class="btn btn-primary" type="submit" style="background:linear-gradient(135deg,#c8102e,#7f0a1a)">Yönetici Girişi →</button>
         </form>
     </div>
 

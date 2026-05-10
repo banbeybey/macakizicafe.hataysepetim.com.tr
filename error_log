@@ -51,3 +51,8 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/masa.php on line 119
+[11-May-2026 01:08:15 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
+[11-May-2026 01:08:16 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
+[11-May-2026 01:08:17 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
+[11-May-2026 01:08:17 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
+[11-May-2026 01:08:19 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442

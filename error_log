@@ -56,3 +56,179 @@ Stack trace:
 [11-May-2026 01:08:17 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
 [11-May-2026 01:08:17 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
 [11-May-2026 01:08:19 Europe/Istanbul] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/hataysep/macakizicafe.hataysepetim.com.tr/adisyon_gecmisi.php on line 442
+[11-May-2026 01:48:43 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:44 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:46 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:50 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:53 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:56 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:57 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:48:59 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:01 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:03 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:05 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:07 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:10 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:12 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:14 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:16 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:18 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:20 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:22 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:24 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:26 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:28 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:30 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:32 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:34 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:36 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:38 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:40 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:42 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:44 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:46 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:48 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:50 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:52 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:54 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:56 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:49:58 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:00 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:02 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:04 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:06 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:08 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:10 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42
+[11-May-2026 01:50:45 Europe/Istanbul] PHP Fatal error:  Uncaught Error: Call to undefined function masaGorseli() in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/hataysep/macakizicafe.hataysepetim.com.tr/admin.php on line 42

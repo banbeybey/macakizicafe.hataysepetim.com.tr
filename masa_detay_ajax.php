@@ -47,15 +47,15 @@ function tl($n){ return number_format((float)$n, 2, ',', '.') . ' ₺'; }
 
 $masa_no_yazi = 'MASA '.str_pad((int)$masa["masa_no"],2,"0",STR_PAD_LEFT);
 $masa_no_int = (int)$masa["masa_no"];
-$gorsel = in_array($masa_no_int, [1,2,3,4]) ? "/uploads/masalar/locamasa.png" : "/uploads/masalar/normalmasa.png";
+$gorsel = in_array($masa_no_int, [1,2,3,4]) ? "/uploads/masalar/dolulocamasa.png" : "/uploads/masalar/dolunormalmasa.png";
 
 $html = '<div class="close-panel-layout">';
 $html .= '<div class="close-table-preview">';
-$html .= '<div class="preview-card dolu">';
-$html .= '<div class="preview-top"><span class="preview-dot"></span><b>DOLU MASA</b></div>';
-$html .= '<div class="preview-img-wrap"><img src="'.htmlspecialchars($gorsel, ENT_QUOTES, 'UTF-8').'" alt="'.$masa_no_yazi.'"></div>';
-$html .= '<div class="preview-table-no">'.$masa_no_yazi.'</div>';
-$html .= '<div class="preview-total">'.tl($genel_toplam).'</div>';
+$html .= '<div class="masa-card dolu" style="min-height:unset;cursor:default">';
+$html .= '<div class="card-top"><div class="masa-label"><span></span> Admin Durum</div><div class="masa-badge">DOLU</div></div>';
+$html .= '<div class="table-wrapper"><img class="table-image" src="'.htmlspecialchars($gorsel, ENT_QUOTES, 'UTF-8').'" alt="'.$masa_no_yazi.'"></div>';
+$html .= '<div class="masa-main"><div class="masa-no">'.$masa_no_yazi.'</div></div>';
+$html .= '<div class="masa-detail"><div><strong>'.htmlspecialchars($adisyon["garson_adi"] ?? "Garson", ENT_QUOTES, 'UTF-8').'</strong> · '.date('H:i', strtotime($adisyon["acilis_tarihi"])).'</div><div class="price-line">'.tl($genel_toplam).'</div></div>';
 $html .= '</div>';
 $html .= '</div>';
 $html .= '<div class="close-detail-area">';

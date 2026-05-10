@@ -2,6 +2,7 @@
 session_start();
 require_once "db.php";
 
+// ✅ admin_login.php'ye yönlendir (login.php değil)
 if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "admin") {
     header("Location: admin_login.php"); exit;
 }
@@ -25,6 +26,7 @@ $gunluk = $conn->query("
 $dolu = $conn->query("SELECT COUNT(*) AS t FROM masalar WHERE durum='dolu'")->fetch_assoc()["t"];
 $bos  = $conn->query("SELECT COUNT(*) AS t FROM masalar WHERE durum='bos'")->fetch_assoc()["t"];
 
+// ✅ Yardımcı fonksiyon: masa görseli seç (dolu/boş, loca/normal)
 function masaGorseli($masaNo, $durum) {
     if (in_array($masaNo, [1,2,3,4])) {
         return ($durum === "dolu") ? "/uploads/masalar/dolulocamasa.png" : "/uploads/masalar/locamasa.png";
@@ -44,6 +46,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
     while ($m = $masalarAjax->fetch_assoc()):
         $durum  = $m["durum"];
         $masaNo = (int)$m["masa_no"];
+        // ✅ dolu/boş görsel
         $gorsel       = masaGorseli($masaNo, $durum);
         $gorselDosya  = $_SERVER["DOCUMENT_ROOT"] . $gorsel;
         $gorselVersiyon = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
@@ -69,11 +72,8 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
             <div>Müsait</div>
         <?php endif; ?>
     </div>
-    <!-- ✅ SİPARİŞ EKLE BUTONU (her zaman görünür) -->
-    <a class="siparis-ekle-btn" href="admin_masa.php?id=<?php echo (int)$m['id']; ?>">➕ Sipariş Ekle</a>
-
     <?php if ($durum === "dolu"): ?>
-        <button class="siparis-detay-btn" type="button" onclick="openSiparisDetay(<?php echo (int)$m['id']; ?>)">🧾 Sipariş Detayları</button>
+        <button class="siparis-detay-btn" type="button" onclick="openSiparisDetay(<?php echo (int)$m['id']; ?>)">🧾 Sipariş Detaylarını Gör</button>
         <button class="admin-close-btn" type="button" onclick="openMasaPanel(<?php echo (int)$m['id']; ?>)">Masayı Kapat</button>
     <?php else: ?>
         <button class="admin-close-btn" type="button" disabled>Boş Masa</button>
@@ -97,7 +97,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
 :root{
   --bg1:#eef7ff;--bg2:#f7fbff;--card:#ffffff;--line:rgba(51,65,85,.13);
   --cyan:#10c8ee;--cyan2:#36e4ff;--green:#24e88a;--red:#ff3b55;
-  --text:#1f2937;--muted:#64748b;--gold:#f5b942;--purple:#a855f7;
+  --text:#1f2937;--muted:#64748b;--gold:#f5b942;
 }
 body{
   margin:0;font-family:'DM Sans',Arial,sans-serif;color:var(--text);min-height:100vh;
@@ -106,7 +106,12 @@ body{
   linear-gradient(180deg,#f5fbff 0%,#edf7ff 46%,#f8fbff 100%);
 }
 a{text-decoration:none;color:inherit}
-.topnav{position:sticky;top:0;z-index:50;min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 22px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(51,65,85,.12);box-shadow:0 10px 24px rgba(15,23,42,.08)}
+.topnav{
+  position:sticky;top:0;z-index:50;min-height:70px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 22px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(51,65,85,.12);box-shadow:0 10px 24px rgba(15,23,42,.08);
+}
 .brand{display:flex;align-items:center;gap:12px}
 .brand-icon{width:44px;height:44px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:25px;background:linear-gradient(135deg,#ff1744,#0f172a);box-shadow:0 10px 22px rgba(255,23,68,.25)}
 .brand-name{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;color:#111827;line-height:1}
@@ -122,10 +127,9 @@ a{text-decoration:none;color:inherit}
 .stat-value{font-size:27px;font-weight:950;color:#0f172a;margin-top:4px}.gold{color:#c88700}
 .nav-menu{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:0 0 22px}
 .nav-item{min-height:58px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px 10px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#edf8ff);border:1px solid rgba(51,65,85,.13);color:#1e293b;font-weight:900;font-size:13px;box-shadow:0 12px 24px rgba(15,23,42,.08)}
-.nav-icon{font-size:17px}
-.section-title{font-size:24px;font-weight:950;color:#0f172a;margin:14px 0 14px;letter-spacing:.2px}
+.nav-icon{font-size:17px}.section-title{font-size:24px;font-weight:950;color:#0f172a;margin:14px 0 14px;letter-spacing:.2px}
 .masalar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:18px}
-.masa-card{position:relative;min-height:360px;overflow:hidden;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(245,251,255,.84)),radial-gradient(circle at 22% 15%,rgba(54,228,255,.22),transparent 40%),radial-gradient(circle at 88% 18%,rgba(255,59,85,.12),transparent 38%);border:1px solid rgba(51,65,85,.14);box-shadow:0 16px 32px rgba(15,23,42,.13),0 2px 0 rgba(255,255,255,.85) inset;transition:.22s ease;isolation:isolate}
+.masa-card{position:relative;min-height:316px;overflow:hidden;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(245,251,255,.84)),radial-gradient(circle at 22% 15%,rgba(54,228,255,.22),transparent 40%),radial-gradient(circle at 88% 18%,rgba(255,59,85,.12),transparent 38%);border:1px solid rgba(51,65,85,.14);box-shadow:0 16px 32px rgba(15,23,42,.13),0 2px 0 rgba(255,255,255,.85) inset;transition:.22s ease;isolation:isolate}
 .masa-card:before{content:"";position:absolute;inset:0;border-radius:26px;background:linear-gradient(135deg,rgba(255,255,255,.70),transparent 38%,rgba(16,200,238,.10));pointer-events:none;z-index:1}
 .masa-card:after{content:"";position:absolute;left:18px;right:18px;bottom:13px;height:4px;border-radius:999px;background:linear-gradient(90deg,transparent,var(--green),var(--cyan2),transparent);box-shadow:0 0 14px rgba(36,232,138,.38);z-index:5}
 .masa-card.dolu:after{background:linear-gradient(90deg,transparent,var(--red),#ff9aa8,transparent);box-shadow:0 0 14px rgba(255,59,85,.32)}
@@ -144,31 +148,15 @@ a{text-decoration:none;color:inherit}
 .masa-no{display:inline-flex;align-items:center;justify-content:center;min-width:126px;height:48px;padding:0 15px;border-radius:17px;font-size:21px;font-weight:950;letter-spacing:1px;color:#0f172a;background:linear-gradient(180deg,#ffffff,#e7f7ff);border:1px solid rgba(16,200,238,.62);box-shadow:inset 0 0 18px rgba(255,255,255,.65),0 8px 20px rgba(16,200,238,.14)}
 .bos .masa-no{color:#fff;background:linear-gradient(135deg,#22c55e,#0f8f3f);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.30);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(34,197,94,.46),0 10px 24px rgba(15,143,63,.25)}
 .dolu .masa-no{color:#fff;background:linear-gradient(135deg,#ff1744,#b40016);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.35);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(255,23,68,.48),0 10px 24px rgba(180,0,22,.28)}
-.masa-detail{position:relative;z-index:3;padding:0 16px 14px;text-align:center;color:var(--muted);font-size:13px;font-weight:850;min-height:38px}
+.masa-detail{position:relative;z-index:3;padding:0 16px 18px;text-align:center;color:var(--muted);font-size:13px;font-weight:850;min-height:38px}
 .masa-detail strong{color:#0f172a}.dolu .masa-detail strong{color:#b40016}.bos .masa-detail strong{color:#0f8f3f}
 .price-line{margin-top:5px;font-family:'Playfair Display',serif;font-size:17px;font-weight:800;color:#111827}
-
-/* ✅ YENİ SİPARİŞ EKLE BUTONU */
-.siparis-ekle-btn{
-  position:relative;z-index:4;display:block;width:calc(100% - 28px);margin:0 14px 8px;
-  border-radius:16px;padding:12px 10px;text-align:center;
-  font-weight:950;letter-spacing:.2px;font-size:13px;
-  color:#fff;background:linear-gradient(135deg,#10c8ee,#a855f7);
-  box-shadow:0 10px 22px rgba(168,85,247,.30);
-  transition:.2s;font-family:'DM Sans',sans-serif;
-}
-.siparis-ekle-btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 12px 26px rgba(168,85,247,.45)}
-
-.admin-close-btn{position:relative;z-index:4;width:calc(100% - 28px);margin:0 14px 14px;border:0;border-radius:16px;padding:11px 10px;cursor:pointer;font-weight:950;letter-spacing:.2px;color:#fff;background:linear-gradient(135deg,#ff3b55,#b40016);box-shadow:0 12px 22px rgba(255,59,85,.28);font-family:'DM Sans',sans-serif;font-size:13px}
+.admin-close-btn{position:relative;z-index:4;width:calc(100% - 28px);margin:0 14px 18px;border:0;border-radius:16px;padding:12px 10px;cursor:pointer;font-weight:950;letter-spacing:.2px;color:#fff;background:linear-gradient(135deg,#ff3b55,#b40016);box-shadow:0 12px 22px rgba(255,59,85,.28);font-family:'DM Sans',Arial,sans-serif}
 .admin-close-btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .admin-close-btn:disabled{cursor:not-allowed;opacity:.45;background:#94a3b8;box-shadow:none}
-.siparis-detay-btn{position:relative;z-index:4;width:calc(100% - 28px);margin:0 14px 8px;border:0;border-radius:16px;padding:11px 10px;cursor:pointer;font-weight:950;letter-spacing:.2px;color:#0f172a;background:linear-gradient(135deg,#e0f4ff,#b8e8ff);border:1px solid rgba(16,200,238,.45);box-shadow:0 8px 18px rgba(16,200,238,.18);font-family:'DM Sans',sans-serif;font-size:13px}
+.siparis-detay-btn{position:relative;z-index:4;width:calc(100% - 28px);margin:0 14px 8px;border:0;border-radius:16px;padding:11px 10px;cursor:pointer;font-weight:950;letter-spacing:.2px;color:#0f172a;background:linear-gradient(135deg,#e0f4ff,#b8e8ff);border:1px solid rgba(16,200,238,.45);box-shadow:0 8px 18px rgba(16,200,238,.18);font-family:'DM Sans',Arial,sans-serif;font-size:13px}
 .siparis-detay-btn:hover{filter:brightness(1.05);transform:translateY(-1px);box-shadow:0 10px 22px rgba(16,200,238,.28)}
-
-@media(max-width:768px){
-  .siparis-detay-btn,.siparis-ekle-btn{font-size:9px;padding:7px 5px;border-radius:10px;width:calc(100% - 12px);margin:0 6px 6px}
-}
-
+@media(max-width:768px){.siparis-detay-btn{font-size:8.5px;padding:6px 5px;border-radius:10px;width:calc(100% - 12px);margin:0 6px 6px}}
 .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-backdrop.active{display:flex}
 .modal-box{width:min(860px,100%);max-height:88vh;overflow:auto;background:linear-gradient(180deg,#fff,#f7fbff);border:1px solid rgba(255,255,255,.72);border-radius:26px;box-shadow:0 30px 80px rgba(15,23,42,.35);padding:18px;color:#0f172a}
@@ -204,20 +192,44 @@ a{text-decoration:none;color:inherit}
 @keyframes sd-spin{to{transform:rotate(360deg)}}
 .modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .modal-title{font-size:22px;font-weight:950}.modal-x{width:38px;height:38px;border:0;border-radius:13px;background:#eef2f7;color:#0f172a;font-size:24px;cursor:pointer}
+.modal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mini-info{background:#f1f8ff;border:1px solid rgba(51,65,85,.10);border-radius:18px;padding:12px}
+.mini-info span{display:block;font-size:11px;color:#64748b;font-weight:900;text-transform:uppercase;margin-bottom:5px}
+.mini-info strong{font-size:15px;font-weight:950}.red-text{color:#d6001c!important}
+.modal-subtitle{font-size:16px;font-weight:950;margin:16px 0 10px}.modal-subtitle.small{font-size:13px;margin-top:12px}
+.order-list{display:flex;flex-direction:column;gap:8px}
+.order-row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#fff;border:1px solid rgba(51,65,85,.10);border-radius:16px;padding:11px 12px}
+.order-row b{display:block;font-size:14px}.order-row small{display:block;color:#64748b;margin-top:3px}
 .empty-order{padding:16px;border-radius:16px;background:#fff3f4;color:#b40016;font-weight:900;text-align:center}
-
+.close-form{margin-top:16px}
+.modal-close-btn{width:100%;border:0;border-radius:18px;padding:15px 14px;cursor:pointer;font-weight:950;font-size:15px;color:#fff;background:linear-gradient(135deg,#ff3b55,#a90014);box-shadow:0 14px 28px rgba(255,59,85,.30)}
+.close-panel-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
+.close-table-preview{position:sticky;top:0}
+.preview-card{border-radius:24px;background:linear-gradient(180deg,#fff,#eef9ff);border:1px solid rgba(51,65,85,.12);box-shadow:0 16px 32px rgba(15,23,42,.12);padding:14px;text-align:center;overflow:hidden}
+.preview-top{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:950;color:#b40016;margin-bottom:10px}
+.preview-dot{width:9px;height:9px;border-radius:99px;background:#ff1744;box-shadow:0 0 12px #ff1744}
+.preview-img-wrap{height:150px;display:flex;align-items:center;justify-content:center;position:relative}
+.preview-img-wrap:before{content:"";position:absolute;width:78%;height:26px;bottom:10px;left:11%;border-radius:50%;background:rgba(30,41,59,.18);filter:blur(12px)}
+.preview-img-wrap img{position:relative;max-width:210px;width:100%;height:142px;object-fit:contain;filter:drop-shadow(0 12px 12px rgba(15,23,42,.20)) brightness(1.08) contrast(1.04)}
+.preview-table-no{display:inline-flex;align-items:center;justify-content:center;min-width:136px;height:44px;border-radius:16px;font-size:19px;font-weight:950;color:#fff;background:linear-gradient(135deg,#ff1744,#b40016);box-shadow:0 0 22px rgba(255,23,68,.35);margin-top:8px}
+.preview-total{margin-top:12px;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#c88700}
+.payment-box{margin:14px 0 12px;background:#f8fbff;border:1px solid rgba(51,65,85,.12);border-radius:17px;padding:12px}
+.payment-box label{display:block;font-size:12px;font-weight:950;color:#334155;text-transform:uppercase;margin-bottom:7px}
+.payment-box select{width:100%;border:1px solid rgba(51,65,85,.18);border-radius:14px;background:#fff;padding:13px 12px;font-size:15px;font-weight:900;color:#0f172a;outline:none}
+.payment-box select:focus{border-color:#ff3b55;box-shadow:0 0 0 3px rgba(255,59,85,.12)}
 @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}.nav-menu{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:768px){
   body{background:linear-gradient(180deg,#eef8ff 0%,#f8fbff 100%)}
   .topnav{position:relative;padding:10px 12px;min-height:auto}.brand-icon{width:38px;height:38px;border-radius:13px}.brand-name{font-size:19px}.brand-sub{font-size:10px}.nav-user{display:none}.btn-ghost{padding:9px 11px;font-size:12px}
   .page{padding:10px 8px 24px}.stats-grid{grid-template-columns:repeat(2,1fr);gap:8px}.stat-card{padding:12px;border-radius:17px}.stat-icon{font-size:18px;margin-bottom:4px}.stat-label{font-size:9px}.stat-value{font-size:19px}
   .nav-menu{grid-template-columns:repeat(2,1fr);gap:7px}.nav-item{min-height:45px;border-radius:14px;font-size:11px;padding:8px}.section-title{font-size:18px;margin:12px 2px}
-  .masalar-grid{grid-template-columns:repeat(3,1fr);gap:8px}.masa-card{min-height:240px;border-radius:18px}.masa-card:before{border-radius:18px}.masa-card:after{left:14px;right:14px;bottom:7px;height:3px}.card-top{padding:7px 7px 0}.masa-label{font-size:8px;gap:4px;padding:5px 6px;border-radius:10px;letter-spacing:.5px}.masa-label span{width:5px;height:5px}.masa-badge{min-width:auto;font-size:9px;padding:5px 7px;border-radius:10px}.table-wrapper{height:86px;padding:2px 4px 0}.table-image{max-width:104px;height:82px}.masa-main{padding:0 6px 8px}.masa-no{min-width:76px;height:32px;border-radius:11px;font-size:13px;padding:0 7px;letter-spacing:.4px}.masa-detail{font-size:9px;line-height:1.25;min-height:30px;padding:0 6px 8px}.price-line{font-size:12px;margin-top:3px}
-  .admin-close-btn{font-size:9px;padding:7px 5px;border-radius:10px;width:calc(100% - 12px);margin:0 6px 8px}
-  .modal-box{border-radius:20px;padding:14px}.modal-title{font-size:18px}
+  .masalar-grid{grid-template-columns:repeat(3,1fr);gap:8px}.masa-card{min-height:202px;border-radius:18px}.masa-card:before{border-radius:18px}.masa-card:after{left:14px;right:14px;bottom:7px;height:3px}.card-top{padding:7px 7px 0}.masa-label{font-size:8px;gap:4px;padding:5px 6px;border-radius:10px;letter-spacing:.5px}.masa-label span{width:5px;height:5px}.masa-badge{min-width:auto;font-size:9px;padding:5px 7px;border-radius:10px}.table-wrapper{height:86px;padding:2px 4px 0}.table-image{max-width:104px;height:82px}.masa-main{padding:0 6px 8px}.masa-no{min-width:76px;height:32px;border-radius:11px;font-size:13px;padding:0 7px;letter-spacing:.4px}.masa-detail{font-size:9px;line-height:1.25;min-height:30px;padding:0 6px 11px}.price-line{font-size:12px;margin-top:3px}
+  .admin-close-btn{font-size:9px;padding:7px 5px;border-radius:10px;width:calc(100% - 12px);margin:0 6px 10px}
+  .close-panel-layout{grid-template-columns:1fr}.close-table-preview{position:relative}.preview-img-wrap{height:110px}.preview-img-wrap img{height:104px}.preview-total{font-size:20px}
+  .modal-grid{grid-template-columns:1fr}.modal-box{border-radius:20px;padding:14px}.modal-title{font-size:18px}.order-row{padding:10px}.order-row b{font-size:13px}
   .sd-box{border-radius:22px}.sd-inner{padding:16px}.sd-masa-no{font-size:20px}.sd-meta{grid-template-columns:1fr 1fr;gap:6px}.sd-total-amount{font-size:18px}
 }
-@media(max-width:390px){.masalar-grid{grid-template-columns:repeat(3,1fr);gap:7px}.masa-card{min-height:230px}.table-image{max-width:96px;height:78px}}
+@media(max-width:390px){.masalar-grid{grid-template-columns:repeat(3,1fr);gap:7px}.masa-card{min-height:196px}.table-image{max-width:96px;height:78px}}
 </style>
 </head>
 <body>
@@ -260,6 +272,7 @@ a{text-decoration:none;color:inherit}
   <?php while ($m = $masalar->fetch_assoc()):
     $durum  = $m["durum"];
     $masaNo = (int)$m["masa_no"];
+    // ✅ dolu/boş görsel
     $gorsel       = masaGorseli($masaNo, $durum);
     $gorselDosya  = $_SERVER["DOCUMENT_ROOT"] . $gorsel;
     $gorselVersiyon = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
@@ -285,11 +298,8 @@ a{text-decoration:none;color:inherit}
           <div>Müsait</div>
         <?php endif; ?>
       </div>
-      <!-- ✅ Her masada sipariş ekleme -->
-      <a class="siparis-ekle-btn" href="admin_masa.php?id=<?php echo (int)$m['id']; ?>">➕ Sipariş Ekle</a>
-
       <?php if ($durum === "dolu"): ?>
-        <button class="siparis-detay-btn" type="button" onclick="openSiparisDetay(<?php echo (int)$m['id']; ?>)">🧾 Sipariş Detayları</button>
+        <button class="siparis-detay-btn" type="button" onclick="openSiparisDetay(<?php echo (int)$m['id']; ?>)">🧾 Sipariş Detaylarını Gör</button>
         <button class="admin-close-btn" type="button" onclick="openMasaPanel(<?php echo (int)$m['id']; ?>)">Masayı Kapat</button>
       <?php else: ?>
         <button class="admin-close-btn" type="button" disabled>Boş Masa</button>
@@ -392,7 +402,7 @@ async function canliMasalariYenile(){
     if(html.trim() !== '') document.getElementById('masalarGrid').innerHTML = html;
   }catch(e){}
 }
-setInterval(canliMasalariYenile, 3000);
+setInterval(canliMasalariYenile, 2000);
 </script>
 </body>
 </html>

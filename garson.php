@@ -9,6 +9,15 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] !== "garson") {
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
+function getMasaAdi($masaNo) {
+    if (in_array($masaNo, [1,2,3,4])) {
+        return "LOCA " . $masaNo;
+    } else {
+        $oyunNo = $masaNo - 4;
+        return "OYUN " . str_pad($oyunNo, 2, "0", STR_PAD_LEFT);
+    }
+}
+
 if (isset($_GET["ajax"])) {
     header("Content-Type: application/json; charset=utf-8");
     $q = $conn->query("SELECT id, masa_no, durum FROM masalar ORDER BY masa_no ASC");
@@ -17,7 +26,6 @@ if (isset($_GET["ajax"])) {
         $masaNo = (int)$r["masa_no"];
         $durum = $r["durum"];
 
-        // ✅ DÜZELTİLDİ: dolu/boş durumuna göre görsel seçimi (masalar.php ile aynı mantık)
         if (in_array($masaNo, [1,2,3,4])) {
             $gorsel = ($durum === "dolu")
                 ? "/uploads/masalar/dolulocamasa.png"
@@ -37,6 +45,8 @@ if (isset($_GET["ajax"])) {
             "badge"   => $durum === "bos" ? "BOŞ" : "DOLU",
             "text"    => $durum === "bos" ? "Kullanıma hazır" : "Şu anda dolu",
             "gorsel"  => $gorsel . "?v=" . $gorselVersiyon,
+            "masa_adi" => getMasaAdi($masaNo),
+            "is_oyun"  => !in_array($masaNo, [1,2,3,4]),
         ];
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -110,6 +120,7 @@ a{text-decoration:none;color:inherit}
 .masa-no{display:inline-flex;align-items:center;justify-content:center;min-width:126px;height:48px;padding:0 15px;border-radius:17px;font-size:21px;font-weight:950;letter-spacing:1px;color:#0f172a;background:linear-gradient(180deg,#ffffff,#e7f7ff);border:1px solid rgba(16,200,238,.62);box-shadow:inset 0 0 18px rgba(255,255,255,.65),0 8px 20px rgba(16,200,238,.14)}
 .bos .masa-no{color:#fff;background:linear-gradient(135deg,#22c55e,#0f8f3f);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.30);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(34,197,94,.46),0 10px 24px rgba(15,143,63,.25)}
 .dolu .masa-no{color:#fff;background:linear-gradient(135deg,#ff1744,#b40016);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.35);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(255,23,68,.48),0 10px 24px rgba(180,0,22,.28)}
+.masa-card.oyun .masa-no{color:#1a1000;background:linear-gradient(135deg,#ffe033,#f5a800);border-color:rgba(255,255,255,.70);text-shadow:0 1px 4px rgba(255,200,0,.30);box-shadow:inset 0 0 18px rgba(255,255,255,.30),0 0 22px rgba(255,200,0,.50),0 10px 24px rgba(200,130,0,.25)}
 .masa-text{margin-top:9px;color:var(--muted);font-size:13px;font-weight:800}
 @media(max-width:768px){
   body{background:linear-gradient(180deg,#eef8ff 0%,#f8fbff 100%)}
@@ -156,8 +167,8 @@ a{text-decoration:none;color:inherit}
   <?php while($m = $masalar->fetch_assoc()):
     $durum = $m["durum"];
     $masaNo = (int)$m["masa_no"];
+    $masaAdi = getMasaAdi($masaNo);
 
-    // ✅ DÜZELTİLDİ: dolu/boş durumuna göre görsel seçimi (masalar.php ile aynı mantık)
     if (in_array($masaNo, [1,2,3,4])) {
         $gorsel = ($durum === "dolu")
             ? "/uploads/masalar/dolulocamasa.png"
@@ -173,7 +184,7 @@ a{text-decoration:none;color:inherit}
     $gorselSrc = $gorsel . "?v=" . $gorselVersiyon;
   ?>
 
-    <a class="masa-card <?php echo htmlspecialchars($durum); ?>"
+    <a class="masa-card <?php echo htmlspecialchars($durum); ?> <?php echo !in_array($masaNo,[1,2,3,4]) ? 'oyun' : ''; ?>"
        href="masa.php?id=<?php echo (int)$m['id']; ?>"
        data-masa-no="<?php echo $masaNo; ?>">
       <div class="card-top">
@@ -181,10 +192,10 @@ a{text-decoration:none;color:inherit}
         <div class="masa-badge"><?php echo $durum == "bos" ? "BO&#350;" : "DOLU"; ?></div>
       </div>
       <div class="table-wrapper">
-        <img class="table-image" src="<?php echo $gorselSrc; ?>" alt="Masa <?php echo $masaNo; ?>">
+        <img class="table-image" src="<?php echo $gorselSrc; ?>" alt="<?php echo htmlspecialchars($masaAdi); ?>">
       </div>
       <div class="masa-info">
-        <div class="masa-no">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
+        <div class="masa-no"><?php echo htmlspecialchars($masaAdi); ?></div>
         <div class="masa-text"><?php echo $durum == "bos" ? "Kullan&#305;ma haz&#305;r" : "&#350;u anda dolu"; ?></div>
       </div>
     </a>
@@ -197,15 +208,23 @@ a{text-decoration:none;color:inherit}
 (function(){
   const endpoint = window.location.pathname + '?ajax=1';
 
+  function getMasaAdi(masaNo){
+    if(masaNo >= 1 && masaNo <= 4) return 'LOCA ' + masaNo;
+    return 'OYUN ' + String(masaNo - 4).padStart(2, '0');
+  }
+
   function setCard(card, item){
     const old = card.classList.contains('dolu') ? 'dolu' : 'bos';
     if(old !== item.durum){ card.classList.remove('bos','dolu'); card.classList.add(item.durum); }
     const badge = card.querySelector('.masa-badge');
     const text  = card.querySelector('.masa-text');
     const img   = card.querySelector('.table-image');
+    const no    = card.querySelector('.masa-no');
     if(badge && badge.textContent.trim() !== item.badge) badge.textContent = item.badge;
     if(text  && text.textContent.trim()  !== item.text)  text.textContent  = item.text;
     if(img   && item.gorsel && img.getAttribute('src') !== item.gorsel) img.setAttribute('src', item.gorsel);
+    if(no    && item.masa_adi && no.textContent.trim() !== item.masa_adi) no.textContent = item.masa_adi;
+    if(item.is_oyun) card.classList.add('oyun'); else card.classList.remove('oyun');
   }
 
   async function guncelle(){

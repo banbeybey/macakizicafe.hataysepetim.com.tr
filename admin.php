@@ -37,6 +37,14 @@ function masaGorseli($masaNo, $durum) {
     }
 }
 
+function getMasaAdi($masaNo) {
+    if (in_array($masaNo, [1,2,3,4])) {
+        return "LOCA " . $masaNo;
+    } else {
+        return "OYUN " . str_pad($masaNo - 4, 2, "0", STR_PAD_LEFT);
+    }
+}
+
 if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
     $masalarAjax = $conn->query("
         SELECT m.*, a.toplam_tutar, a.acilis_tarihi, k.ad AS garson_adi
@@ -54,7 +62,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
         $gorselVersiyon = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
         $gorselSrc    = $gorsel . "?v=" . $gorselVersiyon;
 ?>
-<div class="masa-card <?php echo htmlspecialchars($durum); ?>">
+<div class="masa-card <?php echo htmlspecialchars($durum); ?> <?php echo !in_array($masaNo,[1,2,3,4]) ? 'oyun' : ''; ?>">
     <div class="card-top">
         <div class="masa-label"><span></span> Admin Durum</div>
         <div class="masa-badge"><?php echo $durum == "bos" ? "BOŞ" : "DOLU"; ?></div>
@@ -63,7 +71,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
         <img class="table-image" src="<?php echo $gorselSrc; ?>" alt="Masa <?php echo $masaNo; ?>">
     </div>
     <div class="masa-main">
-        <div class="masa-no">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
+        <div class="masa-no"><?php echo htmlspecialchars(getMasaAdi($masaNo)); ?></div>
     </div>
     <div class="masa-detail">
         <?php if ($durum === "dolu"): ?>
@@ -168,6 +176,7 @@ a{text-decoration:none;color:inherit}
 .masa-no{display:inline-flex;align-items:center;justify-content:center;min-width:126px;height:48px;padding:0 15px;border-radius:17px;font-size:21px;font-weight:950;letter-spacing:1px;color:#0f172a;background:linear-gradient(180deg,#ffffff,#e7f7ff);border:1px solid rgba(16,200,238,.62);box-shadow:inset 0 0 18px rgba(255,255,255,.65),0 8px 20px rgba(16,200,238,.14)}
 .bos .masa-no{color:#fff;background:linear-gradient(135deg,#22c55e,#0f8f3f);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.30);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(34,197,94,.46),0 10px 24px rgba(15,143,63,.25)}
 .dolu .masa-no{color:#fff;background:linear-gradient(135deg,#ff1744,#b40016);border-color:rgba(255,255,255,.70);text-shadow:0 2px 8px rgba(0,0,0,.35);box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(255,23,68,.48),0 10px 24px rgba(180,0,22,.28)}
+.masa-card.oyun .masa-no{color:#1a1000;background:linear-gradient(135deg,#ffe033,#f5a800);border-color:rgba(255,255,255,.70);text-shadow:0 1px 4px rgba(255,200,0,.30);box-shadow:inset 0 0 18px rgba(255,255,255,.30),0 0 22px rgba(255,200,0,.50),0 10px 24px rgba(200,130,0,.25)}
 .masa-detail{position:relative;z-index:3;padding:0 16px 18px;text-align:center;color:var(--muted);font-size:13px;font-weight:850;min-height:38px}
 .masa-detail strong{color:#0f172a}.dolu .masa-detail strong{color:#b40016}.bos .masa-detail strong{color:#0f8f3f}
 .price-line{margin-top:5px;font-family:'Playfair Display',serif;font-size:17px;font-weight:800;color:#111827}
@@ -326,7 +335,7 @@ a{text-decoration:none;color:inherit}
     $gorselVersiyon = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
     $gorselSrc    = $gorsel . "?v=" . $gorselVersiyon;
   ?>
-    <div class="masa-card <?php echo htmlspecialchars($durum); ?>">
+    <div class="masa-card <?php echo htmlspecialchars($durum); ?> <?php echo !in_array($masaNo,[1,2,3,4]) ? 'oyun' : ''; ?>">
       <div class="card-top">
         <div class="masa-label"><span></span> Admin Durum</div>
         <div class="masa-badge"><?php echo $durum == "bos" ? "BOŞ" : "DOLU"; ?></div>
@@ -335,7 +344,7 @@ a{text-decoration:none;color:inherit}
         <img class="table-image" src="<?php echo $gorselSrc; ?>" alt="Masa <?php echo $masaNo; ?>">
       </div>
       <div class="masa-main">
-        <div class="masa-no">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
+        <div class="masa-no"><?php echo htmlspecialchars(getMasaAdi($masaNo)); ?></div>
       </div>
       <div class="masa-detail">
         <?php if ($durum === "dolu"): ?>

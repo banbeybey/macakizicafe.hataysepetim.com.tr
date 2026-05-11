@@ -1,6 +1,14 @@
 <?php
 require_once "db.php";
 
+function getMasaAdi($masaNo) {
+    if (in_array($masaNo, [1,2,3,4])) {
+        return "LOCA " . $masaNo;
+    } else {
+        return "OYUN " . str_pad($masaNo - 4, 2, "0", STR_PAD_LEFT);
+    }
+}
+
 if (isset($_GET["ajax"])) {
     header("Content-Type: application/json; charset=utf-8");
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -25,11 +33,13 @@ if (isset($_GET["ajax"])) {
         $gorselVersiyon = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
 
         $data[] = [
-            "masa_no" => $masaNo,
-            "durum" => $durum,
-            "badge" => $durum === "bos" ? "BOŞ" : "DOLU",
-            "text" => $durum === "bos" ? "Kullanıma hazır" : "Şu anda dolu",
-            "gorsel" => $gorsel . "?v=" . $gorselVersiyon
+            "masa_no"  => $masaNo,
+            "durum"    => $durum,
+            "badge"    => $durum === "bos" ? "BOŞ" : "DOLU",
+            "text"     => $durum === "bos" ? "Kullanıma hazır" : "Şu anda dolu",
+            "gorsel"   => $gorsel . "?v=" . $gorselVersiyon,
+            "masa_adi" => getMasaAdi($masaNo),
+            "is_oyun"  => !in_array($masaNo, [1,2,3,4]),
         ];
     }
 
@@ -353,6 +363,13 @@ body{
     text-shadow:0 2px 8px rgba(0,0,0,.35);
     box-shadow:inset 0 0 18px rgba(255,255,255,.18),0 0 22px rgba(255,23,68,.48),0 10px 24px rgba(180,0,22,.28);
 }
+.masa-card.oyun .masa-no{
+    color:#1a1000;
+    background:linear-gradient(135deg,#ffe033,#f5a800);
+    border-color:rgba(255,255,255,.70);
+    text-shadow:0 1px 4px rgba(255,200,0,.30);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.30),0 0 22px rgba(255,200,0,.50),0 10px 24px rgba(200,130,0,.25);
+}
 
 .masa-text{
     margin-top:9px;
@@ -426,7 +443,7 @@ body{
     $gorselSrc = $gorsel . "?v=" . $gorselVersiyon;
 ?>
 
-        <div class="masa-card <?php echo htmlspecialchars($durum); ?>" data-masa-no="<?php echo $masaNo; ?>">
+        <div class="masa-card <?php echo htmlspecialchars($durum); ?> <?php echo !in_array($masaNo,[1,2,3,4]) ? 'oyun' : ''; ?>" data-masa-no="<?php echo $masaNo; ?>">
             <div class="card-top">
                             <div class="masa-label"><span></span> Canlı Durum</div>
                 <div class="badge"><?php echo $durum == "bos" ? "BOŞ" : "DOLU"; ?></div>
@@ -437,7 +454,7 @@ body{
             </div>
 
             <div class="masa-info">
-                <div class="masa-no">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
+                <div class="masa-no"><?php echo htmlspecialchars(getMasaAdi($masaNo)); ?></div>
                 <div class="masa-text"><?php echo $durum == "bos" ? "Kullanıma hazır" : "Şu anda dolu"; ?></div>
             </div>
 
@@ -463,6 +480,7 @@ body{
         const badge = card.querySelector('.badge');
         const text = card.querySelector('.masa-text');
         const img = card.querySelector('.table-image');
+        const no = card.querySelector('.masa-no');
 
         if(badge && badge.textContent.trim() !== item.badge){
             badge.textContent = item.badge;
@@ -472,6 +490,12 @@ body{
         }
         if(img && item.gorsel && img.getAttribute('src') !== item.gorsel){
             img.setAttribute('src', item.gorsel);
+        }
+        if(no && item.masa_adi && no.textContent.trim() !== item.masa_adi){
+            no.textContent = item.masa_adi;
+        }
+        if(item.is_oyun !== undefined){
+            if(item.is_oyun) card.classList.add('oyun'); else card.classList.remove('oyun');
         }
     }
 

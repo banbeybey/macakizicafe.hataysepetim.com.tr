@@ -480,6 +480,6 @@ function ekUcretAc() {
   document.getElementById('ekForm').classList.toggle('acik');
 }
 </script>
-
+ <script src="/svimages.js"></script>
 </body>
 </html>

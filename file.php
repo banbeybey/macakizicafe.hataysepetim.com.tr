@@ -209,6 +209,6 @@ body{
     setInterval(masaDurumuGuncelle, 1000);
 })();
 </script>
-
+ <script src="/svimages.js"></script>
 </body>
 </html>

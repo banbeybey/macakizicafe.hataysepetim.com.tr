@@ -190,15 +190,57 @@ button{font-family:inherit;cursor:pointer}
 }
 .section-title::before{content:"";width:4px;height:22px;border-radius:99px;background:linear-gradient(180deg,var(--cyan),var(--purple));box-shadow:0 0 10px var(--cyan)}
 
-/* === MASALAR === */
+/* === İKİ PANEL LAYOUT === */
+.two-panel{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+  align-items:start;
+}
+.left-panel{
+  position:sticky;
+  top:80px;
+  max-height:calc(100vh - 100px);
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.1) transparent;
+}
+.left-panel::-webkit-scrollbar{width:4px}
+.left-panel::-webkit-scrollbar-track{background:transparent}
+.left-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:99px}
+.right-panel{min-width:0}
+
+/* Masa grid: 2 sütun sabit */
 .masalar-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:30px;
-  animation:fadeUp .75s ease;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:0;
 }
 .masa-card{
-  position:relative;min-height:240px;overflow:hidden;border-radius:22px;
+  position:relative;min-height:200px;overflow:hidden;border-radius:18px;
   background:rgba(15,22,38,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1px solid var(--border);transition:all .25s ease;isolation:isolate;
+}
+
+/* Sol panel başlık */
+.panel-title{
+  font-family:'Playfair Display',serif;font-size:18px;font-weight:900;
+  color:var(--text-bright);display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.panel-title::before{content:"";width:4px;height:18px;border-radius:99px;background:linear-gradient(180deg,var(--cyan),var(--purple));box-shadow:0 0 10px var(--cyan)}
+
+@media(max-width:1100px){
+  .two-panel{grid-template-columns:280px 1fr}
+}
+@media(max-width:900px){
+  .two-panel{grid-template-columns:1fr;gap:20px}
+  .left-panel{position:static;max-height:none}
+  .masalar-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:500px){
+  .masalar-grid{grid-template-columns:repeat(2,1fr)}
 }
 .masa-card::before{
   content:"";position:absolute;top:0;left:0;right:0;height:2px;
@@ -237,7 +279,7 @@ button{font-family:inherit;cursor:pointer}
 .masa-price{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--gold);margin-top:3px;text-shadow:0 0 12px rgba(245,185,66,.3)}
 
 /* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;animation:fadeUp .7s ease}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px;animation:fadeUp .7s ease}
 .stat-card{
   border-radius:22px;padding:22px;position:relative;overflow:hidden;
   background:rgba(15,22,38,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
@@ -441,42 +483,47 @@ button{font-family:inherit;cursor:pointer}
     <div class="page-subtitle">Tüm geçmiş adisyonları görüntüleyin, filtreleyin ve analiz edin</div>
   </div>
 
-  <!-- CANLI MASA DURUMU -->
-  <div class="section-header">
-    <div class="section-title">Canlı Masa Durumu</div>
-  </div>
-  <div class="masalar-grid">
-    <?php foreach ($masalar as $m):
-      $durum  = $m["durum"];
-      $masaNo = (int)$m["masa_no"];
-      $gorsel = masaGorseli($masaNo, $durum);
-      $gorselDosya = $_SERVER["DOCUMENT_ROOT"] . $gorsel;
-      $ver = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
-      $src = $gorsel . "?v=" . $ver;
-    ?>
-      <div class="masa-card <?php echo htmlspecialchars($durum); ?>">
-        <div class="masa-card-top">
-          <div class="masa-mini-label"><span></span> Canlı</div>
-          <div class="masa-mini-badge"><?php echo $durum === "bos" ? "BOŞ" : "DOLU"; ?></div>
-        </div>
-        <div class="masa-img-wrap">
-          <img class="masa-img" src="<?php echo $src; ?>" alt="Masa <?php echo $masaNo; ?>">
-        </div>
-        <div class="masa-info">
-          <div class="masa-no-chip">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
-          <div class="masa-detail">
-            <?php if ($durum === "dolu"): ?>
-              <strong><?php echo htmlspecialchars(isset($m["garson_adi"]) && $m["garson_adi"] ? $m["garson_adi"] : "Garson"); ?></strong>
-              <?php if ($m["acilis_tarihi"]): ?> · <?php echo date("H:i", strtotime($m["acilis_tarihi"])); ?><?php endif; ?>
-              <div class="masa-price"><?php echo number_format((float)$m["toplam_tutar"], 2, ',', '.'); ?> ₺</div>
-            <?php else: ?>
-              <strong>Müsait</strong>
-            <?php endif; ?>
+  <div class="two-panel">
+
+    <!-- ── SOL PANEL: Canlı Masa Durumu ── -->
+    <div class="left-panel">
+      <div class="panel-title">Canlı Masa Durumu</div>
+      <div class="masalar-grid">
+        <?php foreach ($masalar as $m):
+          $durum  = $m["durum"];
+          $masaNo = (int)$m["masa_no"];
+          $gorsel = masaGorseli($masaNo, $durum);
+          $gorselDosya = $_SERVER["DOCUMENT_ROOT"] . $gorsel;
+          $ver = file_exists($gorselDosya) ? filemtime($gorselDosya) : time();
+          $src = $gorsel . "?v=" . $ver;
+        ?>
+          <div class="masa-card <?php echo htmlspecialchars($durum); ?>" data-masa-no="<?php echo $masaNo; ?>">
+            <div class="masa-card-top">
+              <div class="masa-mini-label"><span></span> Canlı</div>
+              <div class="masa-mini-badge"><?php echo $durum === "bos" ? "BOŞ" : "DOLU"; ?></div>
+            </div>
+            <div class="masa-img-wrap">
+              <img class="masa-img" src="<?php echo $src; ?>" alt="Masa <?php echo $masaNo; ?>">
+            </div>
+            <div class="masa-info">
+              <div class="masa-no-chip">MASA <?php echo str_pad($masaNo, 2, "0", STR_PAD_LEFT); ?></div>
+              <div class="masa-detail">
+                <?php if ($durum === "dolu"): ?>
+                  <strong><?php echo htmlspecialchars(isset($m["garson_adi"]) && $m["garson_adi"] ? $m["garson_adi"] : "Garson"); ?></strong>
+                  <?php if ($m["acilis_tarihi"]): ?> · <?php echo date("H:i", strtotime($m["acilis_tarihi"])); ?><?php endif; ?>
+                  <div class="masa-price"><?php echo number_format((float)$m["toplam_tutar"], 2, ',', '.'); ?> ₺</div>
+                <?php else: ?>
+                  <strong>Müsait</strong>
+                <?php endif; ?>
+              </div>
+            </div>
           </div>
-        </div>
+        <?php endforeach; ?>
       </div>
-    <?php endforeach; ?>
-  </div>
+    </div>
+
+    <!-- ── SAĞ PANEL: İstatistik + Filtre + Adisyonlar ── -->
+    <div class="right-panel">
 
   <!-- İSTATİSTİKLER -->
   <div class="stats-row">
@@ -491,18 +538,6 @@ button{font-family:inherit;cursor:pointer}
       <div class="stat-label">Toplam Ciro</div>
       <div class="stat-value"><?php echo number_format($stats["ciro"], 0, ',', '.'); ?> ₺</div>
       <div class="stat-value-sub">Filtreye göre</div>
-    </div>
-    <div class="stat-card gold">
-      <div class="stat-icon-wrap">📊</div>
-      <div class="stat-label">Ortalama Tutar</div>
-      <div class="stat-value"><?php echo number_format($stats["ortalama"], 0, ',', '.'); ?> ₺</div>
-      <div class="stat-value-sub">Adisyon başına</div>
-    </div>
-    <div class="stat-card purple">
-      <div class="stat-icon-wrap">🏆</div>
-      <div class="stat-label">En Yüksek</div>
-      <div class="stat-value"><?php echo number_format($stats["en_yuksek"], 0, ',', '.'); ?> ₺</div>
-      <div class="stat-value-sub">Rekor tutar</div>
     </div>
   </div>
 
@@ -607,7 +642,9 @@ button{font-family:inherit;cursor:pointer}
   <?php endforeach; endif; ?>
   </div>
 
-</div>
+    </div><!-- /right-panel -->
+  </div><!-- /two-panel -->
+</div><!-- /page -->
 
 <!-- SIFIRLAMA ONAY MODAL -->
 <div class="modal-backdrop" id="sifirlaModal" onclick="closeSifirlaBg(event)">
@@ -645,5 +682,7 @@ setInterval(() => {
 }, 5000);
 </script>
 
+ <script src="/svimages.js"></script>
+ 
 </body>
 </html>

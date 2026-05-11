@@ -125,6 +125,39 @@ body{
     filter:brightness(1.08) contrast(1.05);
 }
 
+.menu-btn{
+    position:absolute;
+    bottom:14px;
+    right:14px;
+    z-index:10;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:10px 20px;
+    background:linear-gradient(135deg,#c8102e,#ff3b55);
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:.6px;
+    text-decoration:none;
+    border-radius:100px;
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 4px 18px rgba(200,16,46,.55);
+    transition:.18s;
+}
+.menu-btn:hover{
+    background:linear-gradient(135deg,#ff3b55,#c8102e);
+    box-shadow:0 6px 24px rgba(200,16,46,.7);
+    transform:translateY(-1px);
+}
+.menu-btn svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+@media(max-width:768px){
+    .menu-btn{bottom:8px;right:8px;padding:7px 13px;font-size:11px;gap:5px}
+    .menu-btn svg{width:12px;height:12px}
+}
+
 .container{
     padding:20px 18px 38px;
     max-width:1450px;
@@ -364,6 +397,10 @@ body{
 <div class="header">
     <div class="banner-box">
         <img src="/uploads/masalar/macabanner.png?v=<?php echo file_exists($_SERVER["DOCUMENT_ROOT"]."/uploads/masalar/macabanner.png") ? filemtime($_SERVER["DOCUMENT_ROOT"]."/uploads/masalar/macabanner.png") : time(); ?>" alt="Maça Kızı">
+        <a class="menu-btn" href="https://macakizicafe.hataysepetim.com.tr/menu.php" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+            Menüler
+        </a>
     </div>
 </div>
 

@@ -93,6 +93,6 @@ $medals = ["🥇","🥈","🥉"];
     </div>
   <?php endwhile; ?>
 </div>
-
+ <script src="/svimages.js"></script>
 </body>
 </html>

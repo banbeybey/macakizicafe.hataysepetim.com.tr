@@ -73,6 +73,6 @@ $toplam_ay = $conn->query("
     <?php endwhile; ?>
   </div>
 </div>
-
+ <script src="/svimages.js"></script>
 </body>
 </html>

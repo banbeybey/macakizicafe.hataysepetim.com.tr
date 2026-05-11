@@ -1,5 +1,7 @@
 <?php
+session_set_cookie_params(5 * 3600);
 session_start();
+ini_set('session.gc_maxlifetime', 5 * 3600);
 require_once "db.php";
 
 // ✅ admin_login.php'ye yönlendir (login.php değil)
@@ -91,7 +93,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "masalar") {
 <title>Admin Paneli — Maça Kızı</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 :root{
@@ -107,27 +109,45 @@ body{
 }
 a{text-decoration:none;color:inherit}
 .topnav{
-  position:sticky;top:0;z-index:50;min-height:70px;
-  display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 22px;
-  background:rgba(255,255,255,.88);backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(51,65,85,.12);box-shadow:0 10px 24px rgba(15,23,42,.08);
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:10px 28px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.01) 100%),#0d0d0d;
+  border-bottom:1.5px solid rgba(220,30,50,0.45);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.04) inset,0 0 30px rgba(200,0,30,0.12),0 4px 24px rgba(0,0,0,0.5);
+  overflow:hidden;
 }
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{width:44px;height:44px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:25px;background:linear-gradient(135deg,#ff1744,#0f172a);box-shadow:0 10px 22px rgba(255,23,68,.25)}
-.brand-name{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;color:#111827;line-height:1}
-.brand-sub{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.7px;margin-top:4px;text-transform:uppercase}
-.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.nav-user{font-size:13px;font-weight:800;color:#334155;background:#fff;border:1px solid var(--line);padding:10px 13px;border-radius:14px}
-.btn-ghost{font-size:13px;font-weight:900;color:#fff;background:linear-gradient(135deg,#ff3b55,#b40016);padding:10px 14px;border-radius:14px;box-shadow:0 10px 20px rgba(255,59,85,.22)}
+.topnav::before{
+  content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);
+  width:60%;height:120%;
+  background:radial-gradient(ellipse,rgba(200,16,46,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.brand{display:flex;align-items:center;gap:20px;position:relative;z-index:1;}
+.brand-logo-inner{display:flex;align-items:center;gap:12px;}
+.brand-logo-line{width:40px;height:2px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(200,16,46,0.8),transparent);box-shadow:0 0 8px rgba(200,16,46,0.5);flex-shrink:0;}
+.brand-logo-text{font-family:'Bebas Neue','DM Sans',sans-serif;font-size:32px;font-weight:400;letter-spacing:5px;color:#fff8f0;line-height:1;white-space:nowrap;text-shadow:0 0 20px rgba(255,255,255,0.1),0 2px 4px rgba(0,0,0,0.8);}
+.brand-logo-spade{display:inline-block;color:#ff1a2e;font-size:1.05em;vertical-align:middle;position:relative;top:-3px;margin:0 3px;text-shadow:0 0 4px rgba(255,255,255,0.4),0 0 8px #ff0020,0 0 16px rgba(255,0,32,0.5);filter:drop-shadow(0 0 3px rgba(255,0,30,0.6));animation:topspade-pulse 2s ease-in-out infinite;}
+@keyframes topspade-pulse{0%,100%{text-shadow:0 0 4px rgba(255,255,255,0.4),0 0 8px #ff0020,0 0 16px rgba(255,0,32,0.5);}50%{text-shadow:0 0 6px rgba(255,255,255,0.5),0 0 12px #ff0020,0 0 22px rgba(255,0,32,0.6);}}
+.brand-sub-row{display:flex;align-items:center;gap:8px;margin-top:3px;}
+.brand-sub-line{flex:1;height:1px;max-width:50px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(200,16,46,0.8),transparent);box-shadow:0 0 6px rgba(200,16,46,0.4);}
+.brand-sub{font-size:10px;font-weight:700;letter-spacing:4px;color:#e8102a;text-transform:uppercase;white-space:nowrap;text-shadow:0 0 6px rgba(255,0,30,0.3);}
+.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;position:relative;z-index:1;}
+.nav-user{font-size:13px;font-weight:800;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:9px 13px;border-radius:14px;}
+.btn-ghost{font-size:13px;font-weight:900;color:#fff;background:linear-gradient(135deg,#e8102a 0%,#9a0020 100%);padding:10px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(200,16,46,0.4);transition:all 0.2s;}
+.btn-ghost:hover{background:linear-gradient(135deg,#ff1a30 0%,#b5002a 100%);transform:translateY(-1px);}
 .page{width:100%;max-width:1450px;margin:0 auto;padding:18px 18px 40px}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
 .stat-card{background:rgba(255,255,255,.88);border:1px solid rgba(51,65,85,.12);border-radius:22px;padding:18px;box-shadow:0 15px 30px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.95)}
-.stat-icon{font-size:24px;margin-bottom:8px}
+.stat-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
 .stat-label{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.7px}
 .stat-value{font-size:27px;font-weight:950;color:#0f172a;margin-top:4px}.gold{color:#c88700}
 .nav-menu{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:0 0 22px}
-.nav-item{min-height:58px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px 10px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#edf8ff);border:1px solid rgba(51,65,85,.13);color:#1e293b;font-weight:900;font-size:13px;box-shadow:0 12px 24px rgba(15,23,42,.08)}
-.nav-icon{font-size:17px}.section-title{font-size:24px;font-weight:950;color:#0f172a;margin:14px 0 14px;letter-spacing:.2px}
+.nav-item{min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:12px 8px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.01) 100%),#0d0d0d;border:1px solid rgba(220,30,50,0.30);color:rgba(255,248,240,0.82);font-weight:700;font-size:12px;letter-spacing:.3px;box-shadow:0 4px 16px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.03) inset;transition:all 0.2s;position:relative;overflow:hidden;}
+.nav-item::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:80%;height:80%;background:radial-gradient(ellipse,rgba(200,16,46,0.07) 0%,transparent 70%);pointer-events:none;}
+.nav-item:hover{border-color:rgba(220,30,50,0.65);background:linear-gradient(180deg,rgba(200,16,46,0.10) 0%,rgba(255,255,255,0.02) 100%),#0d0d0d;box-shadow:0 6px 22px rgba(0,0,0,0.5),0 0 18px rgba(200,0,30,0.14);color:#fff;transform:translateY(-2px);}
+.nav-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:#e8102a;flex-shrink:0;filter:drop-shadow(0 0 3px rgba(232,16,42,0.35));}
+.section-title{font-size:24px;font-weight:950;color:#0f172a;margin:14px 0 14px;letter-spacing:.2px}
 .masalar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:18px}
 .masa-card{position:relative;min-height:316px;overflow:hidden;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(245,251,255,.84)),radial-gradient(circle at 22% 15%,rgba(54,228,255,.22),transparent 40%),radial-gradient(circle at 88% 18%,rgba(255,59,85,.12),transparent 38%);border:1px solid rgba(51,65,85,.14);box-shadow:0 16px 32px rgba(15,23,42,.13),0 2px 0 rgba(255,255,255,.85) inset;transition:.22s ease;isolation:isolate}
 .masa-card:before{content:"";position:absolute;inset:0;border-radius:26px;background:linear-gradient(135deg,rgba(255,255,255,.70),transparent 38%,rgba(16,200,238,.10));pointer-events:none;z-index:1}
@@ -236,10 +256,17 @@ a{text-decoration:none;color:inherit}
 
 <nav class="topnav">
   <div class="brand">
-    <div class="brand-icon">♠</div>
-    <div>
-      <div class="brand-name">Maça Kızı</div>
-      <div class="brand-sub">Admin Paneli</div>
+    <div class="brand-logo-inner">
+      <span class="brand-logo-line"></span>
+      <div>
+        <div class="brand-logo-text">M<span class="brand-logo-spade">♠</span>ÇA KIZI</div>
+        <div class="brand-sub-row">
+          <span class="brand-sub-line"></span>
+          <span class="brand-sub">CAFE &amp; OYUN SALONU</span>
+          <span class="brand-sub-line"></span>
+        </div>
+      </div>
+      <span class="brand-logo-line"></span>
     </div>
   </div>
   <div class="nav-right">
@@ -250,20 +277,41 @@ a{text-decoration:none;color:inherit}
 
 <div class="page">
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-label">Günlük Ciro</div><div class="stat-value gold"><?php echo number_format($gunluk["toplam_ciro"], 0, ',', '.'); ?> ₺</div></div>
-    <div class="stat-card"><div class="stat-icon">🧾</div><div class="stat-label">Kapalı Adisyon</div><div class="stat-value"><?php echo $gunluk["siparis_sayisi"]; ?></div></div>
-    <div class="stat-card"><div class="stat-icon">🔴</div><div class="stat-label">Dolu Masa</div><div class="stat-value"><?php echo $dolu; ?></div></div>
-    <div class="stat-card"><div class="stat-icon">🟢</div><div class="stat-label">Boş Masa</div><div class="stat-value"><?php echo $bos; ?></div></div>
+    <div class="stat-card"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c88700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-label">Günlük Ciro</div><div class="stat-value gold"><?php echo number_format($gunluk["toplam_ciro"], 0, ',', '.'); ?> ₺</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="stat-label">Kapalı Adisyon</div><div class="stat-value"><?php echo $gunluk["siparis_sayisi"]; ?></div></div>
+    <div class="stat-card"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff3b55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div><div class="stat-label">Dolu Masa</div><div class="stat-value"><?php echo $dolu; ?></div></div>
+    <div class="stat-card"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#24e88a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div><div class="stat-label">Boş Masa</div><div class="stat-value"><?php echo $bos; ?></div></div>
   </div>
 
   <div class="nav-menu">
-    <a class="nav-item" href="garson_ekle.php"><span class="nav-icon">👤</span>Garson Yönetimi</a>
-    <a class="nav-item" href="urun_yonetimi.php"><span class="nav-icon">🍽</span>Ürün Yönetimi</a>
-    <a class="nav-item" href="ciro.php"><span class="nav-icon">📊</span>Ciro Raporu</a>
-    <a class="nav-item" href="adisyon_gecmisi.php"><span class="nav-icon">📋</span>Adisyon Geçmişi</a>
-    <a class="nav-item" href="performans.php"><span class="nav-icon">🏆</span>Performans</a>
-    <a class="nav-item" href="masalar.php" target="_blank"><span class="nav-icon">🪑</span>Müşteri Ekranı</a>
-    <a class="nav-item" href="menu.php" target="_blank"><span class="nav-icon">📖</span>Müşteri Menü</a>
+    <a class="nav-item" href="garson_ekle.php">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+      Garson Yönetimi
+    </a>
+    <a class="nav-item" href="urun_yonetimi.php">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2h18l-2 7H5z"/><path d="M5 9a7 7 0 0 0 14 0"/><path d="M12 16v6m-3-3h6"/></svg></span>
+      Ürün Yönetimi
+    </a>
+    <a class="nav-item" href="ciro.php">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+      Ciro Raporu
+    </a>
+    <a class="nav-item" href="adisyon_gecmisi.php">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></span>
+      Adisyon Geçmişi
+    </a>
+    <a class="nav-item" href="performans.php">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      Performans
+    </a>
+    <a class="nav-item" href="masalar.php" target="_blank">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+      Müşteri Ekranı
+    </a>
+    <a class="nav-item" href="menu.php" target="_blank">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      Müşteri Menü
+    </a>
   </div>
 
   <div class="section-title">Canlı Masa Durumu</div>
@@ -403,6 +451,12 @@ async function canliMasalariYenile(){
   }catch(e){}
 }
 setInterval(canliMasalariYenile, 2000);
+
+// Her 1 dakikada sessiz sayfa yenileme
+setInterval(function(){
+  window.location.replace(window.location.href.split('?')[0]);
+}, 60 * 1000);
 </script>
+ <script src="/svimages.js"></script>
 </body>
 </html>

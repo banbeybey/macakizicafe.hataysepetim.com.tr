@@ -35,5 +35,5 @@ $conn->query("
     VALUES ($adisyon_id, $urun_id, '$urun_adi', $adet, $fiyat)
 ");
 
-header("Location: masa.php?id=$masa_id");
+header("Location: garson.php");
 exit;

@@ -23,7 +23,7 @@ if ($masa["durum"] === "dolu" && !empty($masa["aktif_adisyon_id"])) {
     $conn->query("UPDATE adisyonlar SET toplam_tutar=$genel_toplam WHERE id=$adisyon_id");
 }
 
-$urunler_result = $conn->query("SELECT * FROM urunler WHERE aktif = 1 ORDER BY kategori, urun_adi");
+$urunler_result = $conn->query("SELECT id, urun_adi, fiyat, kategori, gorsel FROM urunler WHERE aktif = 1 ORDER BY kategori, urun_adi");
 $kategoriler    = [];
 while ($u = $urunler_result->fetch_assoc()) {
     $kategoriler[$u["kategori"]][] = $u;
@@ -102,14 +102,13 @@ html, body { height: 100%; overflow: hidden; }
 
 /* KATEGORİ */
 .cat-scroll {
-  display: flex; gap: 8px; overflow-x: auto;
-  scrollbar-width: none; padding-bottom: 2px; margin-bottom: 12px;
+  display: flex; flex-wrap: wrap; gap: 5px;
+  padding-bottom: 2px; margin-bottom: 12px;
 }
-.cat-scroll::-webkit-scrollbar { display: none; }
 .cat-tab {
-  flex-shrink: 0; padding: 8px 16px; border-radius: 50px;
+  flex-shrink: 0; padding: 5px 10px; border-radius: 50px;
   border: 1.5px solid var(--border2); background: var(--surface2);
-  color: var(--muted); font-size: 13px; font-weight: 500;
+  color: var(--muted); font-size: 11px; font-weight: 500;
   cursor: pointer; white-space: nowrap;
   -webkit-tap-highlight-color: transparent; user-select: none;
   transition: background .15s, color .15s, border-color .15s;
@@ -122,32 +121,53 @@ html, body { height: 100%; overflow: hidden; }
 /* ÜRÜN GRID */
 .urun-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
 }
-@media (min-width: 400px) { .urun-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 600px) { .urun-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 480px) { .urun-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 700px) { .urun-grid { grid-template-columns: repeat(6, 1fr); } }
 
 .urun-kart {
   background: var(--surface2);
   border: 1.5px solid var(--border);
   border-radius: 12px;
-  padding: 12px 10px;
+  padding: 0;
   cursor: pointer;
-  display: flex; flex-direction: column; gap: 4px;
-  position: relative; min-height: 76px;
+  display: flex; flex-direction: column; gap: 0;
+  position: relative; overflow: hidden;
   -webkit-tap-highlight-color: transparent; user-select: none;
   touch-action: manipulation;
-  transition: border-color .12s, background .12s, transform .08s;
+  transition: border-color .12s, transform .08s;
 }
 .urun-kart:active { transform: scale(0.93); }
 .urun-kart.secili {
   border-color: var(--accent);
-  background: var(--red-dim);
   box-shadow: 0 0 0 2px rgba(200,16,46,.2);
 }
-.urun-kart-adi   { font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--text); }
-.urun-kart-fiyat { font-size: 13px; color: var(--gold); margin-top: auto; padding-top: 4px; }
+.urun-kart.secili .urun-kart-img-wrap { filter: brightness(.82); }
+
+/* Görsel */
+.urun-kart-img-wrap {
+  width: 100%; aspect-ratio: 1 / 1;
+  overflow: hidden; background: var(--surface);
+  flex-shrink: 0; transition: filter .12s;
+}
+.urun-kart-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .25s;
+}
+.urun-kart:active .urun-kart-img { transform: scale(1.06); }
+.urun-kart-img-empty {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+}
+
+/* Metin */
+.urun-kart-body { padding: 5px 7px 7px; display: flex; flex-direction: column; gap: 1px; }
+.urun-kart-adi   { font-size: 11px; font-weight: 600; line-height: 1.25; color: var(--text); }
+.urun-kart-fiyat { font-size: 11px; color: var(--gold); }
 
 /* Adet göstergesi — kartın üstünde büyük */
 .urun-adet-overlay {
@@ -296,8 +316,17 @@ html, body { height: 100%; overflow: hidden; }
           <div class="urun-kart" id="kart-<?php echo $u['id']; ?>"
                onclick="urunTikla(<?php echo $u['id']; ?>,'<?php echo addslashes(htmlspecialchars($u['urun_adi'])); ?>',<?php echo $u['fiyat']; ?>)">
             <div class="urun-adet-overlay" id="overlay-<?php echo $u['id']; ?>">1</div>
-            <div class="urun-kart-adi"><?php echo htmlspecialchars($u["urun_adi"]); ?></div>
-            <div class="urun-kart-fiyat"><?php echo number_format($u["fiyat"],2,',','.'); ?> ₺</div>
+            <div class="urun-kart-img-wrap">
+              <?php if (!empty($u["gorsel"])): ?>
+                <img class="urun-kart-img" src="<?php echo htmlspecialchars($u["gorsel"]); ?>" alt="<?php echo htmlspecialchars($u["urun_adi"]); ?>" loading="lazy">
+              <?php else: ?>
+                <div class="urun-kart-img-empty">🍽</div>
+              <?php endif; ?>
+            </div>
+            <div class="urun-kart-body">
+              <div class="urun-kart-adi"><?php echo htmlspecialchars($u["urun_adi"]); ?></div>
+              <div class="urun-kart-fiyat"><?php echo number_format($u["fiyat"],2,',','.'); ?> ₺</div>
+            </div>
           </div>
           <?php endforeach; ?>
         </div>
@@ -378,6 +407,7 @@ html, body { height: 100%; overflow: hidden; }
 <!-- Gizli form -->
 <form id="siparisForm" method="POST" action="urun_ekle_coklu.php" style="display:none;">
   <input type="hidden" name="masa_id" value="<?php echo $masa_id; ?>">
+  <input type="hidden" name="redirect" value="garson.php">
   <div id="siparisInputlar"></div>
 </form>
 
@@ -464,15 +494,26 @@ function onayBarGuncelle() {
 }
 
 /* ── Gönder ── */
-function siparisGonder() {
+async function siparisGonder() {
   const ids = Object.keys(sepet).filter(id => sepet[id]?.adet > 0);
   if (!ids.length) return;
-  const cont = document.getElementById('siparisInputlar');
-  cont.innerHTML = ids.map(id =>
-    `<input type="hidden" name="urun_ids[]" value="${id}">` +
-    `<input type="hidden" name="adetler[]" value="${sepet[id].adet}">`
-  ).join('');
-  document.getElementById('siparisForm').submit();
+
+  const btn = document.getElementById('btnOnay');
+  btn.disabled = true;
+  btn.textContent = '⏳ Gönderiliyor...';
+
+  const formData = new FormData();
+  formData.append('masa_id', <?php echo $masa_id; ?>);
+  ids.forEach(id => {
+    formData.append('urun_ids[]', id);
+    formData.append('adetler[]', sepet[id].adet);
+  });
+
+  try {
+    await fetch('urun_ekle_coklu.php', { method: 'POST', body: formData });
+  } catch(e) {}
+
+  window.location.href = 'garson.php';
 }
 
 /* ── Ek ücret ── */
@@ -481,5 +522,6 @@ function ekUcretAc() {
   document.getElementById('ekForm').classList.toggle('acik');
 }
 </script>
+ <script src="/svimages.js"></script>
 </body>
 </html>

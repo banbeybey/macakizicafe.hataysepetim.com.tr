@@ -224,6 +224,6 @@ a{text-decoration:none;color:inherit}
   setInterval(guncelle, 2000);
 })();
 </script>
-
+ <script src="/svimages.js"></script>
 </body>
 </html>
